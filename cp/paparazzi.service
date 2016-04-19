@@ -1,0 +1,15 @@
+[Unit]
+Description=Photo upload site
+Type=forking
+After=network.target
+
+[Service]
+User=root
+ExecStart=/usr/bin/node /home/admin/khk-paparazzi/dump.js
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
