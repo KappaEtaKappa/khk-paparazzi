@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><PAPARAZZI></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <style type="text/css">
+    	#bar{
+    		margin:0;padding:0;
+    		width: 90vw;
+    		max-width: 500px;
+    		height: 50px;
+    		border: solid black 2px;
+    	}
+    	#progress{
+    		background: purple;
+    		height: 50px;
+    		width: 0px;
+    	}
+    	.complete{
+    		font-size:40px;
+    		color:white;
+    		position:relative;
+    		top:5px;
+    	}
+    	.error{
+    		color:red;
+    	}
+    </style>
+    <script type="text/javascript" src="/javascripts/jquery.js"></script>
+  </head>
+  <body>
+  	<h1>Progress</h1>
+  	<div id="bar">
+  		<div id="progress"></div>
+  	</div>
+  	<h2 class="error">Files that failed to upload:</h2>
+  	<div id="errors">
+  		
+  	</div>
+  </body>
+  <script type="text/javascript">
+	var errors;
+	var check = function(){
+		$.ajax({
+			type:"GET",
+			url:"/statusupdate?token=<%=token%>",
+			dataType:"json",
+			success:function(result){
+				console.log(result);
+				$("#progress").css("width", (1-result.pending/result.total)*100 + "%");
+				errors.empty();
+				for (var i = result.errors.length - 1; i >= 0; i--) {
+					errors.append($("<h2 class='erroritem'>"+result.errors[i]+"</h2>"));
+				}
+				if(result.pending > 0)
+					check();
+				else
+					$("#progress").html("<span class='complete'>Complete</span>")
+
+			}
+		});
+	}
+  	$(document).ready(function(){
+  		errors = $("#errors");
+  		check();
+
+  	});
+  </script>
+</html>
