@@ -77,7 +77,7 @@ app.post("/upload", upload.array("photos", 50), function(req, res){
     if(file.mimetype.split("/")[0] == "image"){
       var originalPath = __dirname + "/" + file.path;
       var newPath = __dirname + "/public/images/" + file.filename + "." +file.originalname.split(".")[file.originalname.split(".").length-1]
-      console.log(newPath)
+      console.log(originalPath, newPath);
       fs.rename(originalPath, newPath, function(err){
         if(err){
           erroredUploads[token].push(file.originalname);
