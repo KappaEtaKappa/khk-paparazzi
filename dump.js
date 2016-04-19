@@ -52,8 +52,9 @@ app.post("/upload", upload.array("photos", 50), function(req, res){
   erroredUploads[token] = [];
 
   req.files.forEach(function(file){
+    console.log(file.originalname.split(".")[file.originalname.split(".").length-1])
     if(file.mimetype.split("/")[0] == "image"){
-      fs.rename(file.path, "public/images/" + file.filename, function(err){
+      fs.rename(file.path, "public/images/" + file.filename + "." +file.originalname.split(".")[file.originalname.split(".").length-1], function(err){
         if(err){
           erroredUploads[token].push(file.originalname);
           removeUpload(file.filename, token);
