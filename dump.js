@@ -10,7 +10,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer  = require('multer');
-var upload = multer({ dest: 'uploads/' });
+var upload = multer({ dest: '/home/admin/khk-paparazzi/uploads/' });
 
 var app = express();
 
@@ -45,9 +45,10 @@ function removeUpload(filename, token){
     }
   }
 }
-var currentJobs;
+
+var currentJobs = 0;
 var maxJobs = 10;
-var jobCounter;
+var jobCounter = 0;
 
 function checkThenRun(cmd, job){
   if(currentJobs >= maxJobs){
@@ -75,19 +76,23 @@ app.post("/upload", upload.array("photos", 50), function(req, res){
 
   req.files.forEach(function(file){
     if(file.mimetype.split("/")[0] == "image"){
-      var originalPath = __dirname + "/" + file.path;
+      var originalPath = file.path;
       var newPath = __dirname + "/public/images/" + file.filename + "." +file.originalname.split(".")[file.originalname.split(".").length-1]
-      console.log(originalPath, newPath);
+      var dirs = fs.readdirSync(__dirname + "/uploads");
+      console.log(originalPath, newPath, dirs);
       fs.rename(originalPath, newPath, function(err){
         if(err){
           erroredUploads[token].push(file.originalname);
           removeUpload(file.filename, token);
           console.log(err);
         }else{
+          var child = exec("chown admin:admin " + newPath, function(error, stdout, stderr){
+            if(error) console.log("Ownership change, failed", error);
+   	 });
           removeUpload(file.filename, token);
           cmd = 'scp -pr "' + newPath + '" ' + 'khk@10.0.0.10:"' + "/home/admin/photos/_Current (Spring 2016)/unsorted".replace(/(["\s'$`\\()])/g,'\\$1') + '"';
           var job = ++jobCounter;
-          console.log('Job:'+job+'\('+currentJobs+'//'+maxJobs+'\) Add/Sync: ', cmd);
+          console.log('Job:'+job+'\('+currentJobs+'/'+maxJobs+'\) Add/Sync: ', cmd);
           checkThenRun(cmd, job);
         }
       });

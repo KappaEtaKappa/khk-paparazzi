@@ -25,6 +25,9 @@
     	.error{
     		color:red;
     	}
+	.noerror{
+		display:none;
+	}
     </style>
     <script type="text/javascript" src="/javascripts/jquery.js"></script>
   </head>
@@ -33,7 +36,7 @@
   	<div id="bar">
   		<div id="progress"></div>
   	</div>
-  	<h2 class="error">Files that failed to upload:</h2>
+  	<h2 id="errornote" class="error noerror">Files that failed to upload:</h2>
   	<div id="errors">
   		
   	</div>
@@ -49,6 +52,10 @@
 				console.log(result);
 				$("#progress").css("width", (1-result.pending/result.total)*100 + "%");
 				errors.empty();
+				if(result.errors.length == 0)
+					$("#errornote").addClass("noerror");
+				else
+					$("#errornote").removeClass("noerror");
 				for (var i = result.errors.length - 1; i >= 0; i--) {
 					errors.append($("<h2 class='erroritem'>"+result.errors[i]+"</h2>"));
 				}
