@@ -86,8 +86,9 @@ app.post("/upload", upload.array("photos", 50), function(req, res){
         }else{
           removeUpload(file.filename, token);
           cmd = 'scp -pr "' + newPath + '" ' + 'khk@10.0.0.10:"' + "/home/admin/photos/_Current (Spring 2016)/unsorted".replace(/(["\s'$`\\()])/g,'\\$1') + '"';
+          var job = ++jobCounter;
           console.log('Job:'+job+'\('+currentJobs+'//'+maxJobs+'\) Add/Sync: ', cmd);
-          checkThenRun(cmd, ++jobCounter);
+          checkThenRun(cmd, job);
         }
       });
       
