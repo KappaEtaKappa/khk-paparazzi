@@ -30,7 +30,7 @@ app.listen(80);
 
 
 app.get("/", function(req, res){
-  res.render("index", {"token":Math.floor(Math.random()*2048).toString(16)});
+  res.render("index", {"token":Math.floor(Math.random()*2048).toString(16), backgrounds:fs.readdirSync(__dirname + "/public/images/show")});
 });
 
 var totalUploads = {};
@@ -77,7 +77,7 @@ app.post("/upload", upload.array("photos", 50), function(req, res){
   req.files.forEach(function(file){
     if(file.mimetype.split("/")[0] == "image"){
       var originalPath = file.path;
-      var newPath = __dirname + "/public/images/" + file.filename + "." +file.originalname.split(".")[file.originalname.split(".").length-1]
+      var newPath = __dirname + "/public/images/show" + file.filename + "." +file.originalname.split(".")[file.originalname.split(".").length-1]
       var dirs = fs.readdirSync(__dirname + "/uploads");
       console.log(originalPath, newPath, dirs);
       fs.rename(originalPath, newPath, function(err){
