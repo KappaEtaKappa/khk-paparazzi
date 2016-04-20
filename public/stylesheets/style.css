@@ -16,4 +16,9 @@ a {
 	    -1px 1px 0 #000,
 	     1px 1px 0 #000;
 }
-
+input{
+	text-shadow:none;
+}
+input[type="submit"]{
+	color:black;
+}
