@@ -5,25 +5,34 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/slideshow.css' />
     <style type="text/css">
-      
+      .slideshowmode{
+        display:none;
+      }
+      #sm{
+        position:fixed;
+	bottom:0px;
+	right:0px;
+	font-size:0.75em;
+      }
     </style>
     <script type="text/javascript" src="/javascripts/jquery.js"></script>
     <script type="text/javascript" src="/javascripts/slideshow.min.js"></script>
 
   </head>
   <body>
-    <h1>Upload your escapades here!</h1>
-    <form   ref='uploadForm' 
+    <form id="mainform"  ref='uploadForm' 
 			id='uploadForm' 
 			action='/upload' 
 			method='post' 
 			encType="multipart/form-data">
+		<h1>Upload your escapades here!</h1>
 		<input type="file" multiple="multiple" accept="image/*" name="photos" />
 		<input type="text" name="token" value="<%- token %>" style="display:none;">
 		<br>
 		<br>
 		<input type='submit' value='&nbsp;Upload!&nbsp;' />
     </form>
+    <button id="sm">Toggle Slideshow Mode</button>
   </body>
   <script type="text/javascript">
     var images = "<%- backgrounds %>";
@@ -59,6 +68,9 @@
 
     $(document).ready(function(){
       $.supersized(slideShow);
+      $("#sm").click(function(){
+	$("#mainform").toggleClass("slideshowmode");
+      });
     });
   </script>
 </html>
