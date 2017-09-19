@@ -45,3 +45,5 @@ else
 	echo !!! Please see the README.
   exit 1
 fi
+
+cd ..
