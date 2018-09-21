@@ -1,5 +1,5 @@
 {
-  "name": "khk-paparazzi",
+  "name": "the.delta.khk.org-photos",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -14,6 +14,6 @@
     "morgan": "~1.6.1",
     "multer": "^1.1.0",
     "serve-favicon": "~2.3.0",
-    "sqlite3": "^3.1.11"
+    "sqlite": "^3.1.11"
   }
 }
